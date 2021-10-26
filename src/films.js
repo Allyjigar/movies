@@ -58,9 +58,10 @@ function orderByYear(array) {
 
 // Exercise 6: Calculate the average of the movies in a category
 function moviesAverageByCategory(array, genre){
-  let arrayNuevo = array.map(movie => movie === movie.genre.filter(element => element === genre));
+  let arrayNuevo = array.filter(movie => movie.genre.includes(genre));
   console.log(arrayNuevo);
-  let result = moviesAverageOfDirector(arrayNuevo, genre);  
+  let total = arrayNuevo.reduce((a, b) => a += b.score, 0); // sumo todas las notas del array
+  let result = Number((total / arrayNuevo.length).toFixed(2)); // divido el total entre los elementos del array para la media y fijo dos decimales
   console.log("EXERCICE 6 ->", result);
   return result;
 }; 
@@ -76,12 +77,13 @@ function hoursToMinutes(array) {
     if (!regex.test(movie.duration[4] || movie.duration[4] === null)){ //comprueba si 4 es null o no es numero
       valor2 = Number(movie.duration[3]);
     } 
-    if (movie.duration[3] === null){ // comprueba si 3 es null
+    if (movie.duration[3] === null || movie.duration[4] === null){ // comprueba si 3 es null
       valor2 = Number(0);
     }
 
     let valor1 = Number(movie.duration[0])*60; // pasa las horas a minutos
-    movie.duration = valor1 + valor2; // le suma los minutos y 
+    movie.duration = valor1 + valor2; // suma los minutos a valor1
+    console.log(movie.duration);
     let minuts = movie.duration;
     return minuts;
   });
