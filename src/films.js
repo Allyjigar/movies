@@ -21,7 +21,6 @@ function moviesAverageOfDirector(array, director) {
   return result;
 };
 
-
 // Exercise 4:  Alphabetic order by title 
 function orderAlphabetically(array) {
   let arrayTitulo = Object.assign([], array).sort(((a, b) => a.title > b.title ? 1: -1)); // hago copia profunda del array para no mutar el original // ordeno el array por title
@@ -30,7 +29,6 @@ function orderAlphabetically(array) {
   console.log("EXERCICE 4 ->", result);
   return result;
 };
-
 
 // Exercise 5: Order by year, ascending
 function orderByYear(array) {
@@ -60,36 +58,40 @@ function orderByYear(array) {
 function moviesAverageByCategory(array, genre){
   let arrayNuevo = array.filter(movie => movie.genre.includes(genre));
   console.log(arrayNuevo);
-  let total = arrayNuevo.reduce((a, b) => a += b.score, 0); // sumo todas las notas del array
-  let result = Number((total / arrayNuevo.length).toFixed(2)); // divido el total entre los elementos del array para la media y fijo dos decimales
+  let arrayScore = arrayNuevo.map(movie => movie.score);
+  console.log(arrayScore);
+  let total = arrayScore.reduce((a, b) => a += b, 0); // sumo todas las notas del array
+  let result = Number((total / arrayScore.length).toFixed(2)); // divido el total entre los elementos del array para la media y fijo dos decimales
   console.log("EXERCICE 6 ->", result);
   return result;
 }; 
 
 // Exercise 7: Modify the duration of movies to minutes
 function hoursToMinutes(array) {
-  let arrayMin = array.map((movie) => { //recorre el array con map, transforma de string a número los valores para hacer los cálculos.
+  let newArray = [...array]; // hago una copia del array para no modificar el original
+  let arrayMin = newArray.map((movie) => { //recorre el array con map, transforma de string a número los valores para hacer los cálculos.
     const regex = /^[0-9]*$/;
     let valor2; 
-    if (regex.test(movie.duration[4])){
+
+    if(regex.test(movie.duration[4])){
       valor2 = Number(movie.duration[3] + movie.duration[4]); //comprueba si el 4 es número o letra, para utilizarlo o no
     } 
-    if (!regex.test(movie.duration[4] || movie.duration[4] === null)){ //comprueba si 4 es null o no es numero
+    if(!regex.test(movie.duration[3])){ //comprueba si 3 es numero
+      valor2 = Number(0);
+    } 
+    if((!regex.test(movie.duration[4])) && (regex.test(movie.duration[3]))){ //comprueba si 4 es null o no es numero
       valor2 = Number(movie.duration[3]);
     } 
-    if (movie.duration[3] === null || movie.duration[4] === null){ // comprueba si 3 es null
-      valor2 = Number(0);
-    }
 
     let valor1 = Number(movie.duration[0])*60; // pasa las horas a minutos
     movie.duration = valor1 + valor2; // suma los minutos a valor1
-    console.log(movie.duration);
     let minuts = movie.duration;
     return minuts;
   });
 
-  minuts = arrayMin.duration;
-  let result = arrayMin;
+  console.log(arrayMin);
+  minuts = newArray.duration;
+  let result = newArray;
   console.log("EXERCICE 7 ->", result)
   return result;
   };
@@ -102,10 +104,7 @@ function bestFilmOfYear(array, year) {
 
   console.log("EXERCICE 8 ->", result);
   return result;
-
 };
-
-
 
 // The following is required to make unit tests work.
 /* Environment setup. Do not modify the below code. */
