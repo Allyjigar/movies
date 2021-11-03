@@ -56,9 +56,9 @@ function orderByYear(array) {
 
 // Exercise 6: Calculate the average of the movies in a category
 function moviesAverageByCategory(array, genre){
-  let arrayNuevo = array.filter(movie => movie.genre.includes(genre));
+  let arrayNuevo = array.filter(movie => movie.genre.includes(genre) && movie.score !== ''); //separa por género y comprueba que tenga score
   console.log(arrayNuevo);
-  let arrayScore = arrayNuevo.map(movie => movie.score);
+  let arrayScore = arrayNuevo.map(movie => movie.score); 
   console.log(arrayScore);
   let total = arrayScore.reduce((a, b) => a += b, 0); // sumo todas las notas del array
   let result = Number((total / arrayScore.length).toFixed(2)); // divido el total entre los elementos del array para la media y fijo dos decimales
@@ -67,34 +67,22 @@ function moviesAverageByCategory(array, genre){
 }; 
 
 // Exercise 7: Modify the duration of movies to minutes
-function hoursToMinutes(array) {
-  let newArray = [...array]; // hago una copia del array para no modificar el original
-  let arrayMin = newArray.map((movie) => { //recorre el array con map, transforma de string a número los valores para hacer los cálculos.
-    const regex = /^[0-9]*$/;
-    let valor2; 
-
-    if(regex.test(movie.duration[4])){
-      valor2 = Number(movie.duration[3] + movie.duration[4]); //comprueba si el 4 es número o letra, para utilizarlo o no
-    } 
-    if(!regex.test(movie.duration[3])){ //comprueba si 3 es numero
-      valor2 = Number(0);
-    } 
-    if((!regex.test(movie.duration[4])) && (regex.test(movie.duration[3]))){ //comprueba si 4 es null o no es numero
-      valor2 = Number(movie.duration[3]);
-    } 
-
-    let valor1 = Number(movie.duration[0])*60; // pasa las horas a minutos
-    movie.duration = valor1 + valor2; // suma los minutos a valor1
-    let minuts = movie.duration;
-    return minuts;
-  });
-
-  console.log(arrayMin);
-  minuts = newArray.duration;
-  let result = newArray;
-  console.log("EXERCICE 7 ->", result)
-  return result;
-  };
+function hoursToMinutes(movies) {
+  const moviesCopy = movies.map(movie => { return { ...movie } }); // copia el array
+  const newArray = [];
+  moviesCopy.map((movie) => {
+    const durationMovie = movie.duration;
+    let minutes = durationMovie.match(/\d+/g).map(Number); //busca los números para pasar a minutos
+    if (minutes.length === 1) {
+      minutes[1] = 0
+    }
+    minutes = minutes[0] * 60 + minutes[1]; //pasa horas a minutos
+    movie.duration = minutes;
+    newArray.push(movie) //crea nuevo array con la modificación 
+  })
+  console.log('EXERCICE 7 ->', newArray);
+  return newArray;
+}
 
 // Exercise 8: Get the best film of a year
 function bestFilmOfYear(array, year) {
